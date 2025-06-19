@@ -58,7 +58,7 @@ class Producer:
     This is an interface; you can't change it.
     """
 
-    def next(self) -> Result:
+    def next(self) -> Result:   # type: ignore
         """Источник никогда не возвращает более max_items записей за один вызов next"""
         ...
 
@@ -104,6 +104,8 @@ class PipeProcessor:
 
             income = producer.next()
             howmuch = 0
+            # TODO:  избавиться от опрсоа длины в цикле внутир while
+            # наивное решение - счетчик над while
             for i in items:
                 howmuch += len(i.items)
 
@@ -111,6 +113,8 @@ class PipeProcessor:
 
             for_send = []
             if howmuch > consumer.max_items:
+                # TODO: избавиться от обхода списка в цикле, сделать
+                # сделать pop(), придется сохранить адишники для вызова в commit
                 for i in items:
                     for j in i.items:
                         for_send.append(j)
